@@ -6,7 +6,7 @@
 *  Gateways: all
 */
 
-function validate_request($user, $pass, $amount, $account, $gateway, $pay_type, $currency, $txn_meta, $return_url, $account_type){
+function validate_request($user, $pass, $amount, $account, $gateway, $pay_type, $currency, $txn_meta, $return_url, $account_type = "CUSTOMER") {
     
     $login = api_login($user, $pass);
 
@@ -126,7 +126,7 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
                 
                 // run txn and return response
                 header('Content-Type: application/json; charset=utf-8');    
-                echo $txn_response = validate_request($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $from_api_call['amount'], $account, strtolower($from_api_call['gateway']), $payment_type, strtoupper($currency), $txn_meta, @$return_url, @$from_api_call['account_type']);
+                echo $txn_response = validate_request($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $from_api_call['amount'], $account, strtolower($from_api_call['gateway']), $payment_type, strtoupper($currency), $txn_meta, @$return_url, $from_api_call['account_type'] ?? NULL);
                 
         } else {
             // detect missing parameters

@@ -89,7 +89,7 @@ function response_msgs($get_msg){
         }
 }
 // escrow api
-function escrow($token, $gateway, $account, $amount, $currency, $merchant_id, $sid, $account_type="CUSTOMER"){
+function escrow($token, $gateway, $account, $amount, $currency, $merchant_id, $sid, $account_type = "CUSTOMER"){
     
     $balance = round(get_wallet_balance($merchant_id, $currency), 2);
 
