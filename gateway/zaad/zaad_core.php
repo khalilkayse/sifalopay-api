@@ -155,7 +155,7 @@ function credit_account($req_id, $account_no, $ref_id, $inv_id, $amount, $curren
           "paymentMethod": "'.api_globals()['payment_method'].'",
           "payerInfo": {
               "accountNo": "'.$account_no.'",
-              "accountType": "CUSTOMER",
+              "accountType": "'.$account_type.'",
               "accountHolder": "Sifalo Customer"
           },
           "transactionInfo": {
