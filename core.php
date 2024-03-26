@@ -431,7 +431,7 @@ function verify_token($user, $token){
 
 function get_merchant_API($gateway, $merchant_id){
 
-    $merchant_id =1;
+    $merchant_id =216;
 
     // if(!check_merchantAPI($gateway, $merchant_id)){
     //    $merchant_id = 1;
