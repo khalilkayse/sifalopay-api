@@ -433,9 +433,9 @@ function get_merchant_API($gateway, $merchant_id){
 
     // $merchant_id = 33;
 
-    if(!check_merchantAPI($gateway, $merchant_id)){
-       $merchant_id = 1;
-    }
+    // if(!check_merchantAPI($gateway, $merchant_id)){
+    //    $merchant_id = 1;
+    // }
     // check if merchant has api 
   $api_keys = [];
     $data = getData("SELECT gateway, username, password, merchant_no, device_type, machine_id, channel_id FROM gateway_keys WHERE merchant_id = '$merchant_id' AND gateway = '$gateway'");
