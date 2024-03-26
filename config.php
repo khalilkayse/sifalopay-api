@@ -18,4 +18,4 @@ $con = mysqli_connect($server, $user, $pass, $db);
 
 // mail gateway
 
-$CFG->wwwroot   = 'http://phpstack-889786-3206524.cloudwaysapps.com';
+//$CFG->wwwroot   = 'http://phpstack-889786-3206524.cloudwaysapps.com';
