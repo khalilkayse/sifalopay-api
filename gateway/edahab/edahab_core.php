@@ -1,14 +1,14 @@
 <?php
 
-function api_globals(){
+function api_globals($merchant_id){
 
     $api_globals = array(
         "succ_code" => "0",
         "succ_status" => "Paid",
         "credit_succ_status" => "Approved",
-        "apiKey" => "oM395cbpeDwuUYPyRKxIbnerxstNkTX8PT11uA", 
-        "agent" => "711674", // this is sifalo edahab marchant account
-        "secret" => "SHSDXiw03Mu1miFD1MWkm4QXSkx36gzbbfpF3r",
+        "apiKey" => get_merchant_API('edahab', $merchant_id)['edahab']['username'], 
+        "secret" => get_merchant_API('edahab', $merchant_id)['edahab']['password'],
+        "agent" => get_merchant_API('edahab', $merchant_id)['edahab']['merchant_no'], // this is sifalo edahab marchant account
         "debit_url" => "https://edahab.net/api/api/IssueInvoice?hash=",
         "credit_url" => "https://edahab.net/api/api/agentPayment?hash="
     );
@@ -16,13 +16,14 @@ function api_globals(){
     return $api_globals;
 }
 
-function debit_txn($account, $amount, $inv_id, $currency){
+function debit_txn($account, $amount, $inv_id, $currency, $merchant_id){
 
+    $api_globals = api_globals($merchant_id);
     $req_params = array(
-        "apiKey" => api_globals()['apiKey'], 
+        "apiKey" => $api_globals['apiKey'], 
         "EdahabNumber" => $account, 
         "Amount" => $amount, 
-        "AgentCode" => api_globals()['agent'],
+        "AgentCode" => $api_globals['agent'],
         "Currency" => $currency,
         "ThirdPartyInvoiceNo" => $inv_id
         
@@ -31,9 +32,9 @@ function debit_txn($account, $amount, $inv_id, $currency){
     // Encode it into a JSON string.
     $json = json_encode($req_params, JSON_UNESCAPED_SLASHES);
     // generate hash    
-    $hashed = hash('SHA256', $json . api_globals()['secret']);
+    $hashed = hash('SHA256', $json . $api_globals['secret']);
 
-    $url = api_globals()['debit_url'] . $hashed;
+    $url = $api_globals['debit_url'] . $hashed;
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -45,17 +46,18 @@ function debit_txn($account, $amount, $inv_id, $currency){
     curl_close($ch);
 
     // check if payment is approved
-    if($response['StatusCode'] == api_globals()['succ_code'] && $response['InvoiceStatus'] == api_globals()['succ_status']){
+    if($response['StatusCode'] == $api_globals['succ_code'] && $response['InvoiceStatus'] == $api_globals['succ_status']){
         return array(true, $response);
     }else{
         return array(false, $response);
     }
 }
 
-function credit_txn($account, $amount, $txn_id, $currency){
+function credit_txn($account, $amount, $txn_id, $currency, $merchant_id){
 
+    $api_globals = api_globals($merchant_id);
     $req_params = array(
-        "apiKey" => api_globals()['apiKey'], 
+        "apiKey" => $api_globals['apiKey'], 
         "phoneNumber" => $account, 
         "transactionAmount" => $amount, 
         "transactionId" => $txn_id
@@ -65,9 +67,9 @@ function credit_txn($account, $amount, $txn_id, $currency){
     // Encode it into a JSON string.
     $json = json_encode($req_params, JSON_UNESCAPED_SLASHES);
     // generate hash    
-    $hashed = hash('SHA256', $json . api_globals()['secret']);
+    $hashed = hash('SHA256', $json . $api_globals['secret']);
 
-    $url = api_globals()['credit_url'] . $hashed;
+    $url = $api_globals['credit_url'] . $hashed;
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -79,7 +81,7 @@ function credit_txn($account, $amount, $txn_id, $currency){
     curl_close($ch);
 
     // check if payment is approved
-    if($response['TransactionStatus'] == api_globals()['credit_succ_status']){
+    if($response['TransactionStatus'] == $api_globals['credit_succ_status']){
         return array(true, $response);
     }else{
         return array(false, $response);

@@ -16,23 +16,23 @@ function gateway_globals(){
         return $gateway_globals;
     }
 // perform debit txn
-function debit_txn($account, $amount){
+function debit_txn($account, $amount, $merchant_id){
     require("pbwallet_txn.php");
 // process txn
 return array(
     "account"=>$account,
     "amount"=>$amount,
-    "data"=> json_encode(pbwallet_debit_txn($account, $amount)));
+    "data"=> json_encode(pbwallet_debit_txn($account, $amount, $merchant_id)));
 }
 
 // perform credit txn
-function credit_txn($account, $amount){
+function credit_txn($account, $amount, $merchant_id){
     require("pbwallet_txn.php");
    // process txn
    return array(
     "account"=>$account,
     "amount"=>$amount,
-    "data"=> json_encode(pbwallet_credit_txn($account, $amount)));
+    "data"=> json_encode(pbwallet_credit_txn($account, $amount, $merchant_id)));
 
    }
 // call this function to run txns and register on DB
@@ -47,7 +47,7 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
             // if the txn is a debit transaction.
             case "debit":
     
-                $txn_data = debit_txn($account, $amount);
+                $txn_data = debit_txn($account, $amount, $merchant_id);
                 $txn = json_decode($txn_data['data'], true);
                 //$txn_data = json_decode($get_txn['data'], true);
                 
@@ -145,7 +145,7 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
             // if the txn is a credit transaction
             case "credit":
     
-                $txn_data = credit_txn($account, $amount);
+                $txn_data = credit_txn($account, $amount, $merchant_id);
                 $txn = json_decode($txn_data['data'], true);
                 
                 // if txn success with no errors process it
@@ -246,7 +246,8 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
 
 function verify_transaction_status($txn_id){
     require("pbwallet_txn.php");
-    return pbwallet_verify_pending_txn($txn_id);
+    $merchant_id = get_merchant_id_by_txn_id($txn_id);
+    return pbwallet_verify_pending_txn($txn_id, $merchant_id);
 
 }
 // this is goning to be the main api function that would be called

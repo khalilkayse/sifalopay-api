@@ -14,16 +14,16 @@ function pbwallet_globals(){
         return $pbwallet_globals;
 }
 
-function pbwallet_debit_txn($account, $amount){
+function pbwallet_debit_txn($account, $amount, $merchant_id){
 
         // call login
-    $login = pbwallet_api_login();
+    $login = pbwallet_api_login($merchant_id);
 
     if($login[0] == true){
         // get login token
         $token = $login[1];
         // run debit txn
-        $payment = push_payment($account, $amount, $token);
+        $payment = push_payment($account, $amount, $token, $merchant_id);
 
         if($payment[0] == true){
             $txn_id = $payment[1];
@@ -32,7 +32,7 @@ function pbwallet_debit_txn($account, $amount){
             // put a 10 second delay here
             sleep(10);
             // retrieve txn info
-            $get_payment_info = get_payment($txn_id, $token);
+            $get_payment_info = get_payment($txn_id, $token, $merchant_id);
 
             if($get_payment_info[0] == true){
 
@@ -41,7 +41,7 @@ function pbwallet_debit_txn($account, $amount){
                     
                     sleep(30); // if payment status is not approved wait 30 more seconds.
                     // get payment status again
-                    return get_payment($txn_id, $token)[1];
+                    return get_payment($txn_id, $token, $merchant_id)[1];
                    
                 } else {
                     
@@ -66,15 +66,15 @@ function pbwallet_debit_txn($account, $amount){
 
 }
 
-function pbwallet_credit_txn($account, $amount){
+function pbwallet_credit_txn($account, $amount, $merchant_id){
         // call login
-        $login = pbwallet_api_login();
+        $login = pbwallet_api_login($merchant_id);
 
         if($login[0] == true){
             // get login token
             $token = $login[1];
             // run debit txn
-            $payment = top_up($account, $amount, $token);
+            $payment = top_up($account, $amount, $token, $merchant_id);
     
             if($payment[0] == true){
 
@@ -92,16 +92,16 @@ function pbwallet_credit_txn($account, $amount){
     
 }
 
-function pbwallet_verify_pending_txn($txn_id){
+function pbwallet_verify_pending_txn($txn_id, $merchant_id){
 
     // call login
-    $login = pbwallet_api_login();
+    $login = pbwallet_api_login($merchant_id);
 
     if($login[0] == true){
         // get login token
         $token = $login[1];
 
-            return get_payment($txn_id, $token);
+            return get_payment($txn_id, $token, $merchant_id);
 
     } else {
         // if login failed

@@ -17,22 +17,22 @@ function generateGRandomString($length = 10) {
     return $randomString;
 }
 
-function debit_payment($account, $amount, $currency){
+function debit_payment($account, $amount, $currency, $merchant_id){
     // generate inv no
     $inv_no = generateGRandomString();
 
     // process transaction
-    $debit_txn = debit_txn($account, $amount, $inv_no, $currency);
+    $debit_txn = debit_txn($account, $amount, $inv_no, $currency, $merchant_id);
     return $debit_txn;
 
 }
 
-function credit_payment($account, $amount, $currency){
+function credit_payment($account, $amount, $currency, $merchant_id){
     // generate inv no
     $txn_id = generateGRandomString();
 
     // process transaction
-    $credit_txn = credit_txn($account, $amount, $txn_id, $currency);
+    $credit_txn = credit_txn($account, $amount, $txn_id, $currency, $merchant_id);
     return $credit_txn;
 
 }

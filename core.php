@@ -447,13 +447,13 @@ function get_merchant_API($gateway, $merchant_id){
                 'merchant_no'=> $raw['merchant_no'],
             ];
 
-            if(strtolower($raw['gateway']) == "zaad"){
+            if($raw['gateway'] == "zaad"){
                 $api_keys[$raw['gateway']]['payment_method'] = "MWALLET_ACCOUNT";
             }
             elseif($raw['gateway'] == "pbwallet"){
                 $api_keys[$raw['gateway']]['machine_id'] = $raw['machine_id'];
                 $api_keys[$raw['gateway']]['channel_id'] = $raw['channel_id'];
-                $api_keys[$raw['gateway']]['device_type'] = $raw['channel_id'];
+                $api_keys[$raw['gateway']]['device_type'] = $raw['device_type'];
             }
         }
         return $api_keys;

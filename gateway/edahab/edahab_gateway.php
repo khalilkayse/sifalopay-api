@@ -20,25 +20,25 @@ function gateway_globals(){
 }
 
 // perform debit txn
-function run_debit_txn($account, $amount, $currency){
+function run_debit_txn($account, $amount, $currency, $merchant_id){
     require("edahab_txn.php");
     // process txn
     return array(
         "account"=>$account,
         "amount"=>$amount,
         "currency"=>$currency,
-        "data"=> json_encode(debit_payment($account, $amount, $currency)));
+        "data"=> json_encode(debit_payment($account, $amount, $currency, $merchant_id)));
 }
 
 // perform credit txn
-function run_credit_txn($account, $amount, $currency){
+function run_credit_txn($account, $amount, $currency, $merchant_id){
     require("edahab_txn.php");
     // process txn
     return array(
         "account"=>$account,
         "amount"=>$amount,
         "currency"=>$currency,
-        "data"=> json_encode(credit_payment($account, $amount, $currency)));
+        "data"=> json_encode(credit_payment($account, $amount, $currency, $merchant_id)));
 }
 
 // call this function to run txns and register on DB
@@ -54,7 +54,7 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
             // if the txn is a debit transaction.
             case "debit":
     
-                $txn = run_debit_txn($account, $amount, $currency);
+                $txn = run_debit_txn($account, $amount, $currency, $merchant_id);
                 $txn_data = json_decode($txn['data'], true)[1];
     
                 // if txn success with no errors process it
@@ -133,7 +133,7 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
             // if the txn is a credit transaction
             case "credit":
     
-                $txn = run_credit_txn($account, $amount, $currency);
+                $txn = run_credit_txn($account, $amount, $currency, $merchant_id);
                 $txn_data = json_decode($txn['data'], true)[1];
                 
                 // if txn success with no errors process it

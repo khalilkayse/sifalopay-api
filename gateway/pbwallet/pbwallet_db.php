@@ -172,3 +172,15 @@ function register_payment($values, $pbwallet, $gateway, $txn_type)
         }
     }
 }
+
+function get_merchant_id_by_txn_id($txn_id) {
+    $data = getData("SELECT merchant_id FROM transaction WHERE txn_id = '$txn_id' limit 1");
+    if(!empty($data)){
+        $row = mysqli_fetch_assoc($data);
+        extract($row);
+            return $row['merchant_id'];
+        
+    }else {
+        return 0;
+    }
+}
