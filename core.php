@@ -460,7 +460,7 @@ function get_merchant_API($gateway, $merchant_id){
         }
         return $api_keys;
     }else{
-        //return "invalid merchant";
+        return "invalid merchant";
 
     }
 
