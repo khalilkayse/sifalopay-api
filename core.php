@@ -432,7 +432,7 @@ function verify_token($user, $token){
 function get_merchant_API($gateway, $merchant_id){
 
     if(!check_merchantAPI($gateway, $merchant_id)){
-       $merchant_id = 0;
+       $merchant_id = 1;
     }
     // check if merchant has api 
   $api_keys = [];
