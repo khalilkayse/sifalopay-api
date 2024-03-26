@@ -20,9 +20,9 @@ function api_globals(){
     "post_url" => "https://api.waafipay.net/asm",
     "api_version" => "1.0", //schemaVersion
     "channel" => "WEB",
-    "api_userID" => get_merchant_API()['zaad']['username'],
-    "api_key" => get_merchant_API()['zaad']['password'],
-    "merchant_no" => get_merchant_API()['zaad']['merchant_no'],
+    "api_userID" => get_merchant_API('zaad')['zaad']['username'],
+    "api_key" => get_merchant_API('zaad')['zaad']['password'],
+    "merchant_no" => get_merchant_API('zaad')['zaad']['merchant_no'],
     "payment_method" => "MWALLET_ACCOUNT",
     "preAuth_detial" => "Transaction Sent",
     "preAuth_commit_detial" => "Commited",
@@ -34,7 +34,7 @@ function api_globals(){
 
 
 // preAuth Transaction
-function preAuth_pay($req_id, $account_no, $ref_id, $inv_id, $amount, $currency){
+function preAuth_pay($req_id, $account_no, $ref_id, $inv_id, $amount, $currency, $merchant_id){
 
     $curl = curl_init();
 
@@ -83,7 +83,7 @@ function preAuth_pay($req_id, $account_no, $ref_id, $inv_id, $amount, $currency)
     
 }
 
-function preAuth_commit($req_id, $txn_id, $ref_id){
+function preAuth_commit($req_id, $txn_id, $ref_id, $merchant_id){
 
     $curl = curl_init();
 
@@ -124,7 +124,7 @@ function preAuth_commit($req_id, $txn_id, $ref_id){
     
 }
 
-function credit_account($req_id, $account_no, $ref_id, $inv_id, $amount, $currency, $account_type="CUSTOMER") {
+function credit_account($req_id, $account_no, $ref_id, $inv_id, $amount, $currency, $account_type="CUSTOMER", $merchant_id) {
 
   if($account_type != "CUSTOMER"){
     $account_no = "018".$account_no;

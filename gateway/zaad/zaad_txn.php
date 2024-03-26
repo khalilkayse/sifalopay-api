@@ -12,7 +12,7 @@ function zaad_globals(){
         return $zaad_globals;
     }
 
-function debit_payment($account, $amount, $currency){
+function debit_payment($account, $amount, $currency, $merchant_id){
     // generate id's
     $ref_id = generateGRandomString();
     $req_id = generateGRandomString();
@@ -26,7 +26,8 @@ function debit_payment($account, $amount, $currency){
         $ref_id, // ref id
         $inv_id, // inv id
         $amount, // amount
-        $currency), true);
+        $currency, 
+        $merchant_id), true);
         
      $re_code = $preAuth_response['responseCode'];
      $re_msg = $preAuth_response['responseMsg']; 
@@ -37,7 +38,9 @@ function debit_payment($account, $amount, $currency){
         $commit_response = json_decode(preAuth_commit(
             $req_id, // req id
             $txn_id, // txn id
-            $ref_id), true);
+            $ref_id,
+            $merchant_id 
+        ), true);
             // return commit response from api
             return $commit_response;
      } else {
@@ -47,7 +50,7 @@ function debit_payment($account, $amount, $currency){
 
 }
 
-function credit_payment($account, $amount, $currency, $account_type){
+function credit_payment($account, $amount, $currency, $account_type, $merchant_id){
     // generate id's
     $ref_id = generateGRandomString();
     $req_id = generateGRandomString();
@@ -62,7 +65,8 @@ function credit_payment($account, $amount, $currency, $account_type){
         $inv_id, // inv id
         $amount, // amount
         $currency,
-        $account_type
+        $account_type,
+        $merchant_id
     ), true);
         
      $re_code = $credit_account['responseCode'];

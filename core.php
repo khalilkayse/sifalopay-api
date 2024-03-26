@@ -429,9 +429,11 @@ function verify_token($user, $token){
 
 }
 
-function get_merchant_API($merchant_id = 1){
+function get_merchant_API($gateway, $merchant_id = 1){
+
+    // check if merchant has api 
   $api_keys = [];
-    $data = getData("SELECT gateway, username, password, merchant_no, device_type, machine_id, channel_id FROM gateway_keys WHERE merchant_id = '$merchant_id'");
+    $data = getData("SELECT gateway, username, password, merchant_no, device_type, machine_id, channel_id FROM gateway_keys WHERE merchant_id = '$merchant_id' AND gateway = '$gateway'");
     if(!empty($data)){
         while($raw = mysqli_fetch_array($data)){
 
