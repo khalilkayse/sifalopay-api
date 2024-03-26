@@ -126,9 +126,7 @@ function preAuth_commit($req_id, $txn_id, $ref_id, $merchant_id){
 
 function credit_account($req_id, $account_no, $ref_id, $inv_id, $amount, $currency, $account_type="CUSTOMER", $merchant_id) {
 
-  if($account_type != "CUSTOMER"){
-    $account_no = "018".$account_no;
-  }
+  
   if(empty($account_type)){
     $account_type = "CUSTOMER";
   }
