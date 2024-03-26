@@ -429,7 +429,7 @@ function verify_token($user, $token){
 
 }
 
-function get_merchant_API($gateway, $merchant_id = 1){
+function get_merchant_API($gateway, $merchant_id){
 
     // $merchant_id = 33;
 
