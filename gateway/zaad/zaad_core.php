@@ -20,9 +20,9 @@ function api_globals($merchant_id){
     "post_url" => "https://api.waafipay.net/asm",
     "api_version" => "1.0", //schemaVersion
     "channel" => "WEB",
-    "api_userID" => get_merchant_API('zaad')['zaad']['username'],
-    "api_key" => get_merchant_API('zaad')['zaad']['password'],
-    "merchant_no" => get_merchant_API('zaad')['zaad']['merchant_no'],
+    "api_userID" => get_merchant_API('zaad', $merchant_id)['zaad']['username'],
+    "api_key" => get_merchant_API('zaad', $merchant_id)['zaad']['password'],
+    "merchant_no" => get_merchant_API('zaad', $merchant_id)['zaad']['merchant_no'],
     "payment_method" => "MWALLET_ACCOUNT",
     "preAuth_detial" => "Transaction Sent",
     "preAuth_commit_detial" => "Commited",
