@@ -11,7 +11,7 @@ function generateGRandomString($length = 10) {
 }
 
 // this function holds static api variables configs
-function api_globals(){
+function api_globals($merchant_id){
 
     $date = date("Y-m-d", time()) . " Africa";
 
@@ -38,26 +38,28 @@ function preAuth_pay($req_id, $account_no, $ref_id, $inv_id, $amount, $currency,
 
     $curl = curl_init();
 
+    $api_globals = api_globals($merchant_id);
+
     curl_setopt_array($curl, array(
-      CURLOPT_URL => api_globals()['post_url'],
+      CURLOPT_URL => $api_globals['post_url'],
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
       CURLOPT_TIMEOUT => 0,
       CURLOPT_FOLLOWLOCATION => true,
-      CURLOPT_HTTP_VERSION => "'.api_globals()['http_v'].'",
+      CURLOPT_HTTP_VERSION => "".$api_globals['http_v']."",
       CURLOPT_CUSTOMREQUEST => 'POST',
       CURLOPT_POSTFIELDS =>'{
-        "schemaVersion"     : "'.api_globals()['api_version'].'",
+        "schemaVersion"     : "'.$api_globals['api_version'].'",
         "requestId"         : "'.$req_id.'",
-        "timestamp"         : "'.api_globals()['time'].'",
-        "channelName"       : "'.api_globals()['channel'].'",
+        "timestamp"         : "'.$api_globals['time'].'",
+        "channelName"       : "'.$api_globals['channel'].'",
         "serviceName"       : "API_PREAUTHORIZE",
         "serviceParams": {
-            "merchantUid": "'.api_globals()['merchant_no'].'",
-            "apiUserId": "'.api_globals()['api_userID'].'",
-            "apiKey": "'.api_globals()['api_key'].'",
-            "paymentMethod": "'.api_globals()['payment_method'].'",
+            "merchantUid": "'.$api_globals['merchant_no'].'",
+            "apiUserId": "'.$api_globals['api_userID'].'",
+            "apiKey": "'.$api_globals['api_key'].'",
+            "paymentMethod": "'.$api_globals['payment_method'].'",
             "payerInfo": {
                 "accountNo": "'.$account_no.'"
             },
@@ -66,7 +68,7 @@ function preAuth_pay($req_id, $account_no, $ref_id, $inv_id, $amount, $currency,
                 "invoiceId": "'.$inv_id.'",
                 "amount": "'.$amount.'",
                 "currency": "'.$currency.'",
-                "description": "'.api_globals()['preAuth_detial'].'"
+                "description": "'.$api_globals['preAuth_detial'].'"
             }
         }
 
@@ -87,28 +89,30 @@ function preAuth_commit($req_id, $txn_id, $ref_id, $merchant_id){
 
     $curl = curl_init();
 
+    $api_globals = api_globals($merchant_id);
+
     curl_setopt_array($curl, array(
-      CURLOPT_URL => api_globals()['post_url'],
+      CURLOPT_URL => $api_globals['post_url'],
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
       CURLOPT_TIMEOUT => 0,
       CURLOPT_FOLLOWLOCATION => true,
-      CURLOPT_HTTP_VERSION => "'.api_globals()['http_v'].'",
+      CURLOPT_HTTP_VERSION => "".$api_globals['http_v']."",
       CURLOPT_CUSTOMREQUEST => 'POST',
       CURLOPT_POSTFIELDS =>'{
-        "schemaVersion"     : "'.api_globals()['api_version'].'",
+        "schemaVersion"     : "'.$api_globals['api_version'].'",
         "requestId"         : "'.$req_id.'",
-        "timestamp"         : "'.api_globals()['time'].'",
-        "channelName"       : "'.api_globals()['channel'].'",
+        "timestamp"         : "'.$api_globals['time'].'",
+        "channelName"       : "'.$api_globals['channel'].'",
         "serviceName"       : "API_PREAUTHORIZE_COMMIT",
         "serviceParams": {
-            "merchantUid": "'.api_globals()['merchant_no'].'",
-            "apiUserId": "'.api_globals()['api_userID'].'",
-            "apiKey": "'.api_globals()['api_key'].'",
+            "merchantUid": "'.$api_globals['merchant_no'].'",
+            "apiUserId": "'.$api_globals['api_userID'].'",
+            "apiKey": "'.$api_globals['api_key'].'",
             "transactionId": "'.$txn_id.'",
             "referenceId": "'.$ref_id.'",
-            "description": "'.api_globals()['preAuth_commit_detial'].'"
+            "description": "'.$api_globals['preAuth_commit_detial'].'"
         }
 
         }
@@ -133,8 +137,10 @@ function credit_account($req_id, $account_no, $ref_id, $inv_id, $amount, $curren
 
   $curl = curl_init();
 
+  $api_globals = api_globals($merchant_id);
+
   curl_setopt_array($curl, array(
-    CURLOPT_URL => api_globals()['post_url'],
+    CURLOPT_URL => $api_globals['post_url'],
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -143,16 +149,16 @@ function credit_account($req_id, $account_no, $ref_id, $inv_id, $amount, $curren
     CURLOPT_HTTP_VERSION => "'.api_globals()['http_v'].'",
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS =>'{
-      "schemaVersion"     : "'.api_globals()['api_version'].'",
+      "schemaVersion"     : "'.$api_globals['api_version'].'",
       "requestId"         : "'.$req_id.'",
-      "timestamp"         : "'.api_globals()['time'].'",
-      "channelName"       : "'.api_globals()['channel'].'",
+      "timestamp"         : "'.$api_globals['time'].'",
+      "channelName"       : "'.$api_globals['channel'].'",
       "serviceName"       : "API_CREDITACCOUNT",
       "serviceParams": {
-          "merchantUid": "'.api_globals()['merchant_no'].'",
-          "apiUserId": "'.api_globals()['api_userID'].'",
-          "apiKey": "'.api_globals()['api_key'].'",
-          "paymentMethod": "'.api_globals()['payment_method'].'",
+          "merchantUid": "'.$api_globals['merchant_no'].'",
+          "apiUserId": "'.$api_globals['api_userID'].'",
+          "apiKey": "'.$api_globals['api_key'].'",
+          "paymentMethod": "'.$api_globals['payment_method'].'",
           "payerInfo": {
               "accountNo": "'.$account_no.'",
               "accountType": "'.$account_type.'",
@@ -163,7 +169,7 @@ function credit_account($req_id, $account_no, $ref_id, $inv_id, $amount, $curren
               "invoiceId": "'.$inv_id.'",
               "amount": "'.$amount.'",
               "currency": "'.$currency.'",
-              "description": "'.api_globals()['credit_detail'].'"
+              "description": "'.$api_globals['credit_detail'].'"
           }
       }
 
