@@ -447,7 +447,7 @@ function get_merchant_API($gateway, $merchant_id){
                 'merchant_no'=> $raw['merchant_no'],
             ];
 
-            if($raw['gateway'] == "zaad"){
+            if(strtolower($raw['gateway']) == "zaad"){
                 $api_keys[$raw['gateway']]['payment_method'] = "MWALLET_ACCOUNT";
             }
             elseif($raw['gateway'] == "pbwallet"){
