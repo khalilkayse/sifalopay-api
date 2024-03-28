@@ -8,14 +8,16 @@
 */
 
 // call this function to input txn to DB
-function register_payment($values, $zaad, $gateway, $txn_type){
+function register_payment($values, $zaad, $gateway, $txn_type)
+{
 
     // check gateway type and txn type before processing db input
-    if($gateway == "zaad" && $txn_type == "debit"){
+    if ($gateway == "zaad" && $txn_type == "debit") {
 
-            
-            if($zaad != 0){
-                insert_action("transaction",
+
+        if ($zaad != 0) {
+            insert_action(
+                "transaction",
                 array(
                     'txn_id' => $values['txn_id'],
                     'sid' => $values['sid'],
@@ -30,9 +32,11 @@ function register_payment($values, $zaad, $gateway, $txn_type){
                     'txn_status' => $values['txn_status'],
                     'txn_date' => $values['txn_date'],
                     'merchant_id' => $values['merchant_id']
-                ));
+                )
+            );
 
-                insert_action("zaad",
+            insert_action(
+                "zaad",
                 array(
                     'txn_id' => $zaad['txn_id'],
                     'request_id' => $zaad['req_id'],
@@ -43,17 +47,19 @@ function register_payment($values, $zaad, $gateway, $txn_type){
                     'currency_type' => $zaad['currency_type'],
                     'description' => $zaad['txn_detail'],
                     'txn_date' => $zaad['txn_date']
-                ));
+                )
+            );
 
-                // calculate wallet balance
-                $get_balance = round(get_wallet_balance($values['merchant_id'], $values['currency_type']),6);
-                if($get_balance != 0){
-                    $balance = $get_balance + $values['total_amount'];
-                } else {
-                    $balance = $values['total_amount'];
-                }
+            // calculate wallet balance
+            $get_balance = round(get_wallet_balance($values['merchant_id'], $values['currency_type']), 6);
+            if ($get_balance != 0) {
+                $balance = $get_balance + $values['total_amount'];
+            } else {
+                $balance = $values['total_amount'];
+            }
 
-                insert_action("wallet",
+            insert_action(
+                "wallet",
                 array(
                     'txn_id' => $values['txn_id'],
                     'merchant_id' => $values['merchant_id'],
@@ -63,24 +69,25 @@ function register_payment($values, $zaad, $gateway, $txn_type){
                     'gateway' => $values['payment_type'],
                     'description' => $zaad['txn_detail'],
                     'txn_date' => $values['txn_date']
-                ));
+                )
+            );
 
-                // update balance
-                if($values['currency_type'] == "SLSH"){
-                    $account_sfx = "ZAAD-SLSH";
+            // update balance
+            if ($values['currency_type'] == "SLSH") {
+                $account_sfx = "ZAAD-SLSH";
+            } else {
+                $account_sfx = "ZAAD-USD";
+            }
 
-                }else{
-                    $account_sfx = "ZAAD-USD";
-                }
+            updateGatewayBalance($account_sfx, "DEBIT", $zaad['amount']);
+        } else {
 
-                updateGatewayBalance($account_sfx, "DEBIT", $zaad['amount']);
-            }else {
-
-                insert_action("transaction",
+            insert_action(
+                "transaction",
                 array(
 
                     'amount' => $values['amount'],
-					'account' => $values['account'],
+                    'account' => $values['account'],
                     'sid' => $values['sid'],
                     'total_amount' => $values['total_amount'],
                     'payment_type' => $values['payment_type'],
@@ -90,59 +97,65 @@ function register_payment($values, $zaad, $gateway, $txn_type){
                     'txn_status' => $values['txn_status'],
                     'txn_date' => $values['txn_date'],
                     'merchant_id' => $values['merchant_id']
-                ));
+                )
+            );
+        }
+    } elseif ($gateway == "zaad" && $txn_type == "credit") {
+
+        if ($zaad != 0) {
+
+            insert_action(
+                "transaction",
+                array(
+                    'txn_id' => $values['txn_id'],
+                    'sid' => $values['sid'],
+                    'amount' => $values['amount'],
+                    'commission_perc' => $values['commission_perc'],
+                    'commission' => $values['commission'],
+                    'total_amount' => $values['total_amount'],
+                    'payment_type' => $values['payment_type'],
+                    'currency_type' => $values['currency_type'],
+                    'txn_type' => $values['txn_type'],
+                    'txn_status' => $values['txn_status'],
+                    'txn_date' => $values['txn_date'],
+                    'txn_detail' => $values['txn_detail'],
+                    'merchant_id' => $values['merchant_id']
+                )
+            );
+
+            insert_action(
+                "zaad",
+                array(
+                    'txn_id' => $zaad['txn_id'],
+                    'request_id' => $zaad['req_id'],
+                    'reference_id' => $zaad['ref_no'],
+                    'account_no' => $zaad['account'],
+                    'amount' => $zaad['amount'],
+                    'txn_type' => $zaad['txn_type'],
+                    'currency_type' => $zaad['currency_type'],
+                    'txn_date' => $zaad['txn_date'],
+                    'account_type' => $zaad['account_type'],
+                    'account_holder' => $zaad['account_holder'],
+                    'issuer_approval_code' => $zaad['issuer_approval_code'],
+                    'merchant_charges' => $zaad['merchant_charges'],
+                    'customer_charges' => $zaad['customer_charges'],
+                    'account_exp_date' => $zaad['account_exp_date'],
+                    'issuer_txn_id' => $zaad['issuer_txn_id']
+                )
+            );
+
+            // calculate wallet balance
+            $get_balance = round(get_wallet_balance($values['merchant_id'], $values['currency_type']), 6);
+            if ($get_balance != 0) {
+                $balance = $get_balance - $values['total_amount'];
+            } else {
+                $balance = $get_balance;
             }
 
-
-    }elseif($gateway == "zaad" && $txn_type == "credit"){
-                
-                if($zaad != 0){
-                    
-                    insert_action("transaction",
-                    array(
-                        'txn_id' => $values['txn_id'],
-                        'sid' => $values['sid'],
-                        'amount' => $values['amount'],
-                        'commission_perc' => $values['commission_perc'],
-                        'commission' => $values['commission'],
-                        'total_amount' => $values['total_amount'],
-                        'payment_type' => $values['payment_type'],
-                        'currency_type' => $values['currency_type'],
-                        'txn_type' => $values['txn_type'],
-                        'txn_status' => $values['txn_status'],
-                        'txn_date' => $values['txn_date'],
-                        'txn_detail' => $values['txn_detail'],
-                        'merchant_id' => $values['merchant_id']
-                    ));
-    
-                    insert_action("zaad",
-                    array(
-                        'txn_id' => $zaad['txn_id'],
-                        'request_id' => $zaad['req_id'],
-                        'reference_id' => $zaad['ref_no'],
-                        'account_no' => $zaad['account'],
-                        'amount' => $zaad['amount'],
-                        'txn_type' => $zaad['txn_type'],
-                        'currency_type' => $zaad['currency_type'],
-                        'txn_date' => $zaad['txn_date'],
-                        'account_type' => $zaad['account_type'],
-                        'account_holder' => $zaad['account_holder'],
-                        'issuer_approval_code' => $zaad['issuer_approval_code'],
-                        'merchant_charges' => $zaad['merchant_charges'],
-                        'customer_charges' => $zaad['customer_charges'],
-                        'account_exp_date' => $zaad['account_exp_date'],
-                        'issuer_txn_id' => $zaad['issuer_txn_id']
-                    ));
-
-                    // calculate wallet balance
-                    $get_balance = round(get_wallet_balance($values['merchant_id'], $values['currency_type']),6);
-                    if($get_balance != 0){
-                        $balance = $get_balance - $values['total_amount'];
-                    } else {
-                        $balance = $get_balance;
-                    }
-
-                    insert_action("wallet",
+            //if the merchant has the waafi api then insert the transaction into wallet table 
+            if (!check_merchantAPI('zaad', $values['merchant_id'])) {
+                insert_action(
+                    "wallet",
                     array(
                         'txn_id' => $values['txn_id'],
                         'merchant_id' => $values['merchant_id'],
@@ -153,37 +166,38 @@ function register_payment($values, $zaad, $gateway, $txn_type){
                         'description' => $values['txn_detail'],
                         'txn_date' => $values['txn_date'],
                         'sid' => $values['sid']
-                    )); 
-                // update balance
-                 
-                if($values['currency_type'] == "SLSH"){
-                    $account_sfx = "ZAAD-SLSH";
+                    )
+                );
+            }
 
-                }else{
-                    $account_sfx = "ZAAD-USD";
-                }
-                
-                updateGatewayBalance($account_sfx, "CREDIT", $zaad['amount']);
+            // update balance
 
-                } else {
+            if ($values['currency_type'] == "SLSH") {
+                $account_sfx = "ZAAD-SLSH";
+            } else {
+                $account_sfx = "ZAAD-USD";
+            }
 
-                    insert_action("transaction",
-                    array(
-    
-                        'amount' => $values['amount'],
-						'account' => $values['account'],
-                        'sid' => $values['sid'],
-                        'total_amount' => $values['total_amount'],
-                        'payment_type' => $values['payment_type'],
-                        'currency_type' => $values['currency_type'],
-                        'txn_type' => $values['txn_type'],
-                        'txn_detail' => $values['txn_detail'],
-                        'txn_status' => $values['txn_status'],
-                        'txn_date' => $values['txn_date'],
-                        'merchant_id' => $values['merchant_id']
-                    ));
-                }
+            updateGatewayBalance($account_sfx, "CREDIT", $zaad['amount']);
+        } else {
 
+            insert_action(
+                "transaction",
+                array(
+
+                    'amount' => $values['amount'],
+                    'account' => $values['account'],
+                    'sid' => $values['sid'],
+                    'total_amount' => $values['total_amount'],
+                    'payment_type' => $values['payment_type'],
+                    'currency_type' => $values['currency_type'],
+                    'txn_type' => $values['txn_type'],
+                    'txn_detail' => $values['txn_detail'],
+                    'txn_status' => $values['txn_status'],
+                    'txn_date' => $values['txn_date'],
+                    'merchant_id' => $values['merchant_id']
+                )
+            );
+        }
     }
-
 }
