@@ -153,5 +153,3 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
         log_this($from_api_call, "txn"); // log type
             
     }
-
-?>

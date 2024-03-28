@@ -57,4 +57,3 @@ function read_log($filename){
     
 }
 
-?>
