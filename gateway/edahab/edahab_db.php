@@ -58,8 +58,9 @@ function register_payment($values, $edahab, $gateway, $txn_type)
                 $balance = $values['total_amount'];
             }
 
-            //if the merchant has the edahab api then do not insert the transaction into wallet table 
-            if (!check_merchantAPI('edahab', $values['merchant_id']) && $values['merchant_id'] != 1) {
+            $merchantHasAPI = check_merchantAPI('edahab', $values['merchant_id']) ?? false;
+
+            if ($merchantHasAPI && $values['merchant_id'] == 1) {
                 insert_action(
                     "wallet",
                     array(
@@ -75,6 +76,7 @@ function register_payment($values, $edahab, $gateway, $txn_type)
                     )
                 );
             }
+
             // update balance
             if ($values['currency_type'] == "SLSH") {
                 $account_sfx = "EDAHAB-SLSH";
