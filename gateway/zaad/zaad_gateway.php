@@ -171,7 +171,7 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid, $account
                             "account_type" => "personal",
                             "account_holder" => "",
                             "account_exp_date" => $txn_data['params']['accountExpDate'],
-                            "issuer_approval_code" => $txn_data['params']['issuerApprovalCode'],
+                            "issuer_approval_code" => $txn_data['params']['issuerApprovalCode'] ?? null,
                             "merchant_charges" => $txn_data['params']['merchantCharges'],
                             "customer_charges" => $txn_data['params']['customerCharges']
                             );

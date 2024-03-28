@@ -152,8 +152,8 @@ function register_payment($values, $zaad, $gateway, $txn_type)
                 $balance = $get_balance;
             }
 
-            //if the merchant has the waafi api then insert the transaction into wallet table 
-            //if (!check_merchantAPI('zaad', $values['merchant_id'])) {
+            //if the merchant has the waafi api then do not insert the transaction into wallet table 
+            if (!check_merchantAPI('zaad', $values['merchant_id']) && $values['merchant_id'] != 1) {
                 insert_action(
                     "wallet",
                     array(
@@ -168,7 +168,7 @@ function register_payment($values, $zaad, $gateway, $txn_type)
                         'sid' => $values['sid']
                     )
                 );
-            //}
+            }
 
             // update balance
 

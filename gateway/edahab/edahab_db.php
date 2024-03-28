@@ -58,8 +58,8 @@ function register_payment($values, $edahab, $gateway, $txn_type)
                 $balance = $values['total_amount'];
             }
 
-            //if the merchant has the edahab api then insert the transaction into wallet table 
-            if (!check_merchantAPI('edahab', $values['merchant_id'])) {
+            //if the merchant has the edahab api then do not insert the transaction into wallet table 
+            if (!check_merchantAPI('edahab', $values['merchant_id']) && $values['merchant_id'] != 1) {
                 insert_action(
                     "wallet",
                     array(

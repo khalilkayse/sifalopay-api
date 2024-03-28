@@ -55,8 +55,8 @@ function register_payment($values, $pbwallet, $gateway, $txn_type)
                 $balance = $values['total_amount'];
             }
 
-            //if the merchant has the pbwallet api then insert the transaction into wallet table 
-            if (!check_merchantAPI('pbwallet', $values['merchant_id'])) {
+            //if the merchant has the pbwallet api then do not insert the transaction into wallet table 
+            if (!check_merchantAPI('pbwallet', $values['merchant_id']) && $values['merchant_id'] != 1) {
                 insert_action(
                     "wallet",
                     array(
