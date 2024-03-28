@@ -10,6 +10,8 @@
 // call this function to input txn to DB
 function register_payment($values, $edahab, $gateway, $txn_type)
 {
+    // check if merchant has edahab api
+    $merchantHasAPI = check_merchantAPI('edahab', $values['merchant_id']) ?? false;
 
     // check gateway type and txn type before processing db input
     if ($gateway == "edahab" && $txn_type == "debit") {
@@ -58,8 +60,7 @@ function register_payment($values, $edahab, $gateway, $txn_type)
                 $balance = $values['total_amount'];
             }
 
-            $merchantHasAPI = check_merchantAPI('edahab', $values['merchant_id']) ?? false;
-
+            // if merchant has an API and the merchant id is 1 (sifalo) then insert to wallet table 
             if ($merchantHasAPI && $values['merchant_id'] == 1) {
                 insert_action(
                     "wallet",
@@ -147,20 +148,23 @@ function register_payment($values, $edahab, $gateway, $txn_type)
             } else {
                 $balance = $get_balance;
             }
-
-            insert_action(
-                "wallet",
-                array(
-                    'txn_id' => $values['txn_id'],
-                    'merchant_id' => $values['merchant_id'],
-                    'debit' => $values['total_amount'],
-                    'balance' => round($balance, 6), // round up balance to 6 decimal places
-                    'currency_type' => $values['currency_type'],
-                    'gateway' => $values['payment_type'],
-                    'description' => $edahab['txn_detail'],
-                    'txn_date' => $values['txn_date']
-                )
-            );
+            
+            //if merchant has an API and the merchant id is 1 (sifalo) then insert to wallet table 
+            if ($merchantHasAPI && $values['merchant_id'] == 1) {
+                insert_action(
+                    "wallet",
+                    array(
+                        'txn_id' => $values['txn_id'],
+                        'merchant_id' => $values['merchant_id'],
+                        'debit' => $values['total_amount'],
+                        'balance' => round($balance, 6), // round up balance to 6 decimal places
+                        'currency_type' => $values['currency_type'],
+                        'gateway' => $values['payment_type'],
+                        'description' => $edahab['txn_detail'],
+                        'txn_date' => $values['txn_date']
+                    )
+                );
+            }
 
             // update balance
             if ($values['currency_type'] == "SLSH") {
