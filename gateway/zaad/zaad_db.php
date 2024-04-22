@@ -72,7 +72,8 @@ function register_payment($values, $zaad, $gateway, $txn_type)
                         'currency_type' => $values['currency_type'],
                         'gateway' => $values['payment_type'],
                         'description' => $zaad['txn_detail'],
-                        'txn_date' => $values['txn_date']
+                        'txn_date' => $values['txn_date'],
+                        'sid' => $values['sid']
                     )
                 );
             }
