@@ -61,7 +61,7 @@ function register_payment($values, $zaad, $gateway, $txn_type)
             }
 
             // if merchant has an API and the merchant id is 1 (sifalo) then insert to wallet table 
-            if ($merchantHasAPI && $values['merchant_id'] == 1) {
+            if ($merchantHasAPI || $values['merchant_id'] == 1) {
                 insert_action(
                     "wallet",
                     array(
@@ -158,7 +158,7 @@ function register_payment($values, $zaad, $gateway, $txn_type)
             }
 
             //if merchant has anAPI and the merchant id is 1 (sifalo) then insert to wallet table 
-            if ($merchantHasAPI && $values['merchant_id'] == 1) {
+            if ($merchantHasAPI || $values['merchant_id'] == 1) {
                 insert_action(
                     "wallet",
                     array(
