@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // db connection
 
@@ -8,11 +8,22 @@
 //$pass = "BUELFJet#28u";
 //$db =  "paydb"; 
 
-
-$server = "147.182.238.173";
-$user = "mybajnednq";
-$pass = "haRjJeP3Hp";
-$db =  "mybajnednq";
+if ($_SERVER['HTTP_HOST'] == "sifalopay.local" || $_SERVER['HTTP_HOST'] == "localhost") {
+  $server = "localhost";
+  $user = "root";
+  $pass = "";
+  $db =  "pay";
+} else if ($_SERVER['HTTP_HOST'] == "pay.sifalo.net" || $_SERVER['HTTP_HOST'] == "phpstack-889786-3206524.cloudwaysapps.com") {
+  $server = "74.207.253.75";
+  $user = "staging_admin";
+  $pass = "1q2w3e4r-";
+  $db =  "sifalo_pay_staging";
+} else {
+  $server = "147.182.238.173";
+  $user = "mybajnednq";
+  $pass = "haRjJeP3Hp";
+  $db =  "mybajnednq";
+}
 
 $con = mysqli_connect($server, $user, $pass, $db);
 
