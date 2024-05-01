@@ -79,9 +79,9 @@ function preAuth_pay($req_id, $account_no, $ref_id, $inv_id, $amount, $currency,
       ),
     ));
 
-    return $response = curl_exec($curl);
     $err     = curl_errno( $curl );
     $errmsg  = curl_error( $curl );
+    return $response = curl_exec($curl);
     
 }
 

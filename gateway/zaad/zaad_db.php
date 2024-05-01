@@ -10,8 +10,6 @@
 // call this function to input txn to DB
 function register_payment($values, $zaad, $gateway, $txn_type)
 {
-    // check if merchant has waafi api
-    $merchantHasAPI = check_merchantAPI('zaad', $values['merchant_id']) ?? false;
 
     // check gateway type and txn type before processing db input
     if ($gateway == "zaad" && $txn_type == "debit") {
@@ -61,7 +59,7 @@ function register_payment($values, $zaad, $gateway, $txn_type)
             }
 
             // if merchant has an API and the merchant id is 1 (sifalo) then insert to wallet table 
-            if ($merchantHasAPI || $values['merchant_id'] == 1) {
+            if (isSaveWalletEnabled('zaad', $values['merchant_id'])) {
                 insert_action(
                     "wallet",
                     array(
@@ -159,7 +157,7 @@ function register_payment($values, $zaad, $gateway, $txn_type)
             }
 
             //if merchant has anAPI and the merchant id is 1 (sifalo) then insert to wallet table 
-            if ($merchantHasAPI || $values['merchant_id'] == 1) {
+            if (isSaveWalletEnabled('zaad', $values['merchant_id'])) {
                 insert_action(
                     "wallet",
                     array(

@@ -65,7 +65,6 @@ function transfer_commission($amount){
 
             // round commission
             return round($commission, 2);
-            break;
 
         case $amount > 10 && $amount <= 49:
 
@@ -75,15 +74,12 @@ function transfer_commission($amount){
             // round commission
             return round($commission, 2);
 
-            break;
-
         case $amount > 49 && $amount <= 99:
 
             $commission = ($plan_c / 100) * $amount;
 
             // round commission
             return round($commission, 2);
-            break;
 
         case $amount > 99 && $amount <= 299:
                 
@@ -91,7 +87,6 @@ function transfer_commission($amount){
 
                 // round commission
                 return round($commission, 2);
-                break;
 
         case $amount > 299:
                 
@@ -99,7 +94,6 @@ function transfer_commission($amount){
 
                 // round commission
                 return round($commission, 2);
-                break;
 
         default:
         return $amount;
@@ -123,31 +117,22 @@ function gateway_commission($gateway, $merchant_id){
 
             return $commission = $waafi;
 
-            break;
-
         case $gateway == "edahab":
 
             return $commission = $edahab;
-    
-            break;
+
 
         case $gateway == "pbwallet":
 
             return $commission = $pbwallet;
 
-            break;
-
         case $gateway == "cards":
 
             return $commission = $cards;
-    
-            break;
 
         case $gateway == "ebirr":
 
             return $commission = $ebirr;
-    
-            break;
 
         default:
         return $commission = "1.9";
@@ -495,4 +480,15 @@ function check_merchantAPI($gateway, $merchant_id){
 //     ), "txn" // log type
 // );
 
-?>
+function isSaveWalletEnabled($gateway, $merchant_id) {
+    // Check if merchant has an API
+    $merchant_has_api = check_merchantAPI($gateway, $merchant_id) ?? false;
+
+    if ($merchant_id == 1) {
+        return true;
+    } else if (!$merchant_has_api) {
+        return true;
+    } else {
+        return false;
+    }
+}
