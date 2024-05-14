@@ -77,9 +77,9 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
                         $txn_meta = array($from_api_call['url'], $from_api_call['ip'], $from_api_call['txn_order_id'], $from_api_call['channel'], $from_api_call['billing']);
                     }
                 }else{
-                    
+
                     // capture if request come from checkout api and save order id and billing data
-                    if($from_api_call['channel'] == "checkout"){
+                    if($from_api_call['gateway'] == "checkout"){
                         $txn_meta = array("", $_SERVER['REMOTE_ADDR'], $from_api_call['order_id'], "checkout", $from_api_call['billing']);
                     }else{
                         $txn_meta = array(0,0,0,0,0);
