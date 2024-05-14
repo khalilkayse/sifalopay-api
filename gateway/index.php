@@ -67,7 +67,7 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
         if(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])  && !empty($from_api_call['amount']) && !empty($from_api_call['gateway']) && !empty($from_api_call['currency'])){
             // add "order_id" and "billing"
                 // verify if api call contain txn meta data (billing, ip, url)
-                if(isset($from_api_call['url']) || isset($from_api_call['ip']) || isset($from_api_call['channel']) || isset($from_api_call['billing'])){
+                if((isset($from_api_call['url']) || isset($from_api_call['ip']) || isset($from_api_call['channel']) || isset($from_api_call['billing'])) && $from_api_call['gateway'] != "checkout"){
 
                     // if channel was submitted by the api 
                     if(isset($from_api_call['channel']) && !empty($from_api_call['channel']) && $from_api_call['gateway'] != "checkout"){
