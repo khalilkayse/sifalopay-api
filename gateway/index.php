@@ -74,7 +74,7 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
                     $txn_meta = array($from_api_call['url'], $from_api_call['ip'], $from_api_call['txn_order_id'], $from_api_call['channel'], $from_api_call['billing']);
                     }else{
                         $channel = "custom"; // if the channel was not submitted by the api
-                        $txn_meta = array($from_api_call['url'], $from_api_call['ip'], $from_api_call['txn_order_id'], $from_api_call['channel'], $from_api_call['billing']);
+                        $txn_meta = array("", $_SERVER['REMOTE_ADDR'], $from_api_call['order_id'], $channel, @$from_api_call['billing']);
                     }
                 }else{
 
