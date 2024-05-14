@@ -212,8 +212,8 @@ if(isset($_POST['txn_token'])){
     $run_txn = init_payment($_POST['txn_token'], $_POST['txn_gateway'], $account, $_POST['txn_amount'], $_POST['txn_type'], $_POST['txn_currency'], $_POST['txn_meta'], $_POST['txn_account_type'] ?? null);
     
     // record orderID and IP in the database
-    record_txn_meta($run_txn[1], $_POST['order_id'], $_POST['ip']);
-    
+    record_txn_meta($run_txn[1], $_POST['txn_order_id'], $_POST['txn_ip']);
+
     // run txn
     $txn = response_msgs($run_txn[0]);
 

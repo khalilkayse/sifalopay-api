@@ -25,7 +25,9 @@ function validate_request($user, $pass, $amount, $account, $gateway, $pay_type, 
         "txn_gateway"=>$gateway,
         "txn_meta"=>$txn_meta,
         "txn_return_url"=>$return_url,
-        "txn_account_type"=>$account_type
+        "txn_account_type"=>$account_type,
+        "txn_order_id"=>$order_id,
+        "txn_ip"=>$ip
 
         );
     
