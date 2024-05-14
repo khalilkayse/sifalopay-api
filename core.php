@@ -329,13 +329,15 @@ function api_login($APIuser, $APIpass){
                     $token =  generate_api_token($user); // generate new token
                     $date = time();
                     $validity = $date + 90; // 1.5 minute validity
+                    $ip = @$_SERVER['REMOTE_ADDR'];
                     // insert into db
                     insert_action("api_login",
                     array(
                         'token' => $token,
                         'user_id' => $raw['merchant_id'],
                         'date' => $date,
-                        'token_validity' => $validity
+                        'token_validity' => $validity,
+                        'ip' => $ip
                     ));
                     
                     return array(1, 00, $token);
