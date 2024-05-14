@@ -6,7 +6,7 @@
 *  Gateways: all
 */
 
-function validate_request($user, $pass, $amount, $account, $gateway, $pay_type, $currency, $txn_meta, $return_url, $account_type = "CUSTOMER") {
+function validate_request($user, $pass, $amount, $account, $gateway, $pay_type, $currency, $txn_meta, $return_url, $account_type = "CUSTOMER", $order_id, $ip) {
     
     $login = api_login($user, $pass);
 
@@ -65,7 +65,7 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
     if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']) && isset($from_api_call['amount']) && isset($from_api_call['gateway']) && isset($from_api_call['currency'])){
 
         if(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])  && !empty($from_api_call['amount']) && !empty($from_api_call['gateway']) && !empty($from_api_call['currency'])){
-            // add "order_id" and "billing"
+            // add "order_id" and "IP"
                 // verify if api call contain txn meta data (billing, ip, url)
                 if((isset($from_api_call['url']) || isset($from_api_call['ip']) || isset($from_api_call['channel']) || isset($from_api_call['billing'])) && $from_api_call['gateway'] != "checkout"){
 
@@ -77,7 +77,7 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
                         $txn_meta = array("", $_SERVER['REMOTE_ADDR'], $from_api_call['order_id'], $channel, @$from_api_call['billing']);
                     }
                 }else{
-                    error_log($from_api_call['url']."TEST".$from_api_call['ip']);
+
                     // capture if request come from checkout api and save order id and billing data
                     if($from_api_call['gateway'] == "checkout"){
 
@@ -132,10 +132,15 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
                 } else {
                     $currency = $from_api_call['currency'];
                 }
-                
+
+                // if ip is not set, detect it
+                if(!isset($from_api_call['ip'])){
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                } else { $ip = $from_api_call['ip'];}
+
                 // run txn and return response
                 header('Content-Type: application/json; charset=utf-8');    
-                echo $txn_response = validate_request($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $from_api_call['amount'], $account, strtolower($from_api_call['gateway']), $payment_type, strtoupper($currency), $txn_meta, @$return_url, $from_api_call['account_type'] ?? NULL);
+                echo $txn_response = validate_request($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $from_api_call['amount'], $account, strtolower($from_api_call['gateway']), $payment_type, strtoupper($currency), $txn_meta, @$return_url, $from_api_call['account_type'] ?? NULL, @$from_api_call['order_id'], $ip);
                 
         } else {
             // detect missing parameters

@@ -492,3 +492,19 @@ function isSaveWalletEnabled($gateway, $merchant_id) {
         return false;
     }
 }
+
+
+function record_txn_meta($sid, $order_id, $ip){
+
+    insert_action("txn_log",
+    array(
+        'sid' => $sid,
+        'ip' => $ip
+    ));
+
+    insert_action("billing_address",
+    array(
+        'sid' => $sid,
+        'order_id' => $order_id
+    ));
+}

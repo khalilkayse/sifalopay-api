@@ -24,6 +24,47 @@ function insert_action($db_tbl_name, $request_data)
         return  display_message("success", "Data saved Successfully");
     }
 }
+// update statement
+function update_action($db_tbl_name, $request_data)
+{
+    // Assuming the first element of $request_data contains the unique identifier for the record
+    $id_field = array_key_first($request_data);
+    $id_value = $request_data[$id_field];
+    unset($request_data[$id_field]); // Remove the identifier from the update data
+
+    // Start building the SQL query
+    $sql = "UPDATE " . $db_tbl_name . " SET ";
+    $updates = [];
+    foreach ($request_data as $field => $value) {
+        $updates[] = "`" . $field . "` = ?";
+    }
+    $sql .= implode(', ', $updates);
+    $sql .= " WHERE `" . $id_field . "` = ?";
+
+    // Create a prepared statement
+    $stmt = mysqli_stmt_init($GLOBALS['con']);
+    // Prepare the prepared statement
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        // Return error message if SQL preparation fails
+        return display_message("error", mysqli_error($GLOBALS['con']));
+    } else {
+        // Bind the parameters to the statement
+        $types = str_repeat('s', count($request_data)) . 's'; // All parameters are strings
+        mysqli_stmt_bind_param($stmt, $types, ...array_values($request_data), $id_value);
+
+        // Execute the statement
+        mysqli_stmt_execute($stmt);
+
+        // Check if any rows were updated
+        if (mysqli_stmt_affected_rows($stmt) > 0) {
+            return display_message("success", "Data updated Successfully");
+        } else {
+            return display_message("info", "No data was updated. Check your input.");
+        }
+    }
+}
+
+
 // get data from mysql database
 function getData($sql)
 {
