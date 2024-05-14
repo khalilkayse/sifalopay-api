@@ -31,7 +31,7 @@ function txn_globals(){
 function process_txn_meta($txn_meta, $sid){
 
     if($txn_meta[0] != "0"){
-        $url = $txn_meta[0];
+        $url = @$txn_meta[0];
         $ip = $txn_meta[1];
         $order_id=$txn_meta[2];
         $channel = $txn_meta[3];
