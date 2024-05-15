@@ -135,6 +135,13 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
                     $currency = $from_api_call['currency'];
                 }
 
+                 // Convert Waafi gateway to zaad
+                 if($from_api_call['gateway'] == "WAAFI" || $from_api_call['gateway'] == "waafi"){
+                    $gateway = "zaad";
+                } else {
+                    $gateway = $from_api_call['gateway'];
+                }
+
                 // if ip is not set, detect it
                 if(!isset($from_api_call['ip'])){
                     $ip = @$_SERVER['REMOTE_ADDR'];
@@ -142,7 +149,7 @@ $from_api_call = json_decode(file_get_contents('php://input'), true);  //echo $_
 
                 // run txn and return response
                 header('Content-Type: application/json; charset=utf-8');    
-                echo $txn_response = validate_request($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $from_api_call['amount'], $account, strtolower($from_api_call['gateway']), $payment_type, strtoupper($currency), $txn_meta, @$return_url, $from_api_call['account_type'] ?? NULL, @$from_api_call['order_id'], $ip);
+                echo $txn_response = validate_request($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $from_api_call['amount'], $account, strtolower($gateway), $payment_type, strtoupper($currency), $txn_meta, @$return_url, $from_api_call['account_type'] ?? NULL, @$from_api_call['order_id'], $ip);
                 
         } else {
             // detect missing parameters
