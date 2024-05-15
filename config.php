@@ -15,7 +15,7 @@ if ($_SERVER['HTTP_HOST'] == "pay.sifalo.net" || $_SERVER['HTTP_HOST'] == "phpst
   $user = "staging_admin";
   $pass = "1q2w3e4r-";
   $db =  "sifalo_pay_staging";
-} else if ($_SERVER['HTTP_HOST'] == "api.sifalopay.com" || $_SERVER['HTTP_HOST'] == "phpstack-889786-3084881.cloudwaysapps.com"){
+} elseif ($_SERVER['HTTP_HOST'] == "api.sifalopay.com" || $_SERVER['HTTP_HOST'] == "phpstack-889786-3084881.cloudwaysapps.com"){
   $server = "147.182.238.173";
   $user = "mybajnednq";
   $pass = "haRjJeP3Hp";
