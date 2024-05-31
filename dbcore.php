@@ -24,6 +24,36 @@ function insert_action($db_tbl_name, $request_data)
         return  display_message("success", "Data saved Successfully");
     }
 }
+function value_exists($db_tbl_name, $column, $value)
+{
+    // Build the query
+    $sql = "SELECT 1 FROM " . $db_tbl_name . " WHERE " . $column . " = ? LIMIT 1";
+
+    // Create a prepared statement
+    $stmt = mysqli_stmt_init($GLOBALS['con']);
+    
+    // Prepare the prepared statement
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        return display_message("error", "SQL error: " . mysqli_error($GLOBALS['con']));
+    } else {
+        // Bind the parameters
+        mysqli_stmt_bind_param($stmt, "s", $value);
+        
+        // Execute the statement
+        mysqli_stmt_execute($stmt);
+        
+        // Store the result
+        mysqli_stmt_store_result($stmt);
+        
+        // Check the number of rows returned
+        if (mysqli_stmt_num_rows($stmt) > 0) {
+            return true; // Value exists
+        } else {
+            return false; // Value does not exist
+        }
+    }
+}
+
 // update statement
 // function update_action($db_tbl_name, $request_data)
 // {
