@@ -1,17 +1,7 @@
 <?php
 
-// db connection
-
 // Check the HTTP_HOST and assign the appropriate environment variables
 switch ($_SERVER['HTTP_HOST']) {
-    case "pay.sifalo.net":
-    case "phpstack-889786-3206524.cloudwaysapps.com":
-        // Set environment variables for the staging environment
-        define('DB_SERVER', '74.207.253.75');
-        define('DB_USER', 'staging_admin');
-        define('DB_PASS','1q2w3e4r-');
-        define('DB_NAME','sifalo_pay_staging');
-        break;
     case "api.sifalopay.com":
     case "phpstack-889786-3084881.cloudwaysapps.com":
         // Set environment variables for the production environment
@@ -19,6 +9,12 @@ switch ($_SERVER['HTTP_HOST']) {
         define('DB_USER','mybajnednq');
         define('DB_PASS','haRjJeP3Hp');
         define('DB_NAME','mybajnednq');
+        break;
+    default:
+        define('DB_SERVER', '74.207.253.75');
+        define('DB_USER', 'staging_admin');
+        define('DB_PASS','1q2w3e4r-');
+        define('DB_NAME','sifalo_pay_staging');
         break;
 }
 
