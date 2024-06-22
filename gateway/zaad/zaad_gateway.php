@@ -78,7 +78,8 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid, $account
                                         "txn_type" => "DEBIT",
                                         "txn_detail" => gateway_globals()['description'],
                                         "txn_status" => strtolower($txn_data['params']['state']),
-                                        "merchant_id" => $merchant_id
+                                        "merchant_id" => $merchant_id,
+                                        "account" => $txn['account'],
                                         );
                             // zaad table values
                         $zaad_values = array(
@@ -155,7 +156,8 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid, $account
                             "txn_type" => "CREDIT",
                             "txn_detail" => gateway_globals()['description'],
                             "txn_status" => strtolower($txn_data['params']['state']),
-                            "merchant_id" => $merchant_id
+                            "merchant_id" => $merchant_id,
+                            "account"=> $txn['account'],
                             );
                         // Zaad table values
                     $zaad_values = array(

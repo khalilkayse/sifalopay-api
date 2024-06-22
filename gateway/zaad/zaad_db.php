@@ -31,7 +31,8 @@ function register_payment($values, $zaad, $gateway, $txn_type)
                     'txn_detail' => $values['txn_detail'],
                     'txn_status' => $values['txn_status'],
                     'txn_date' => $values['txn_date'],
-                    'merchant_id' => $values['merchant_id']
+                    'merchant_id' => $values['merchant_id'],
+                    'account' => $values['account']
                 )
             );
 
@@ -123,7 +124,8 @@ function register_payment($values, $zaad, $gateway, $txn_type)
                     'txn_status' => $values['txn_status'],
                     'txn_date' => $values['txn_date'],
                     'txn_detail' => $values['txn_detail'],
-                    'merchant_id' => $values['merchant_id']
+                    'merchant_id' => $values['merchant_id'],
+                    'account' => $values['account']
                 )
             );
 

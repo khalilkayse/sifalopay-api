@@ -81,7 +81,8 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
                                         "txn_type" => "DEBIT",
                                         "txn_detail" => $txn_data['StatusDescription'],
                                         "txn_status" => strtolower($txn_data['InvoiceStatus']),
-                                        "merchant_id" => $merchant_id
+                                        "merchant_id" => $merchant_id,
+                                        "account" => $txn['account']
                                         );
                         // edahab table values
                         $edahab_values = array(
@@ -157,7 +158,8 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
                             "txn_type" => "CREDIT",
                             "txn_detail" => gateway_globals()['description'],
                             "txn_status" => strtolower($txn_data['TransactionStatus']),
-                            "merchant_id" => $merchant_id
+                            "merchant_id" => $merchant_id,
+                            "account" => $txn['account']
                             );
 
                         // edahab table values

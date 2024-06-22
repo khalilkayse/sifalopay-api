@@ -77,7 +77,8 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
                                         'currency' => $currency,
                                         "txn_detail" => gateway_globals()['description'],
                                         "txn_status" => strtolower($txn['Data']['Status']),
-                                        "merchant_id" => $merchant_id
+                                        "merchant_id" => $merchant_id,
+                                        "account" => $txn['Data']['CustomerWalletID']
                                         );
                         // pbwallet table values
                         $pbwallet_values = array(
@@ -171,7 +172,8 @@ function run_txn($txn_type, $account, $amount, $token, $currency, $sid){
                             "txn_type" => "CREDIT",
                             "txn_status" => "executed",
                             "txn_detail" => $txn['Response']['Messages'],
-                            "merchant_id" => $merchant_id
+                            "merchant_id" => $merchant_id,
+                            "account" => $account
                             );
   
                          // pbwallet table values
