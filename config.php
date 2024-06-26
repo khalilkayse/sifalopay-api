@@ -33,4 +33,4 @@ if ($con->connect_error) {
 
 // mail gateway
 
-$CFG->wwwroot   = 'http://api.sifalopay.com';
+//$CFG->wwwroot   = 'http://api.sifalopay.com';
